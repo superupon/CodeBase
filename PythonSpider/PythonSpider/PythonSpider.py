@@ -1,9 +1,18 @@
-﻿import urllib
+﻿'''This is a Project for python spider, You could use it to
+   search which site has the iphone you wanted.
+'''
+import urllib
 import time
 import requests
 import winsound
 
 def search_retail_store(retail_code):
+    """
+    It will search the retail and output result
+    Parameters:
+    @retail_code  retail code you could get when you use chrome to see the action
+    when you open a website
+    """
     url = "http://ir.weip.tech/Home/GetStoreiPhoneList"
     values = {}
     values['storecode'] = retail_code
