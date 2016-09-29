@@ -1,81 +1,59 @@
-
-import urllib2
-import urllib
-import requests
-import sys
-import json
-import ast
+﻿import urllib
 import time
-import win32api,win32con
+import requests
 import winsound
 
-retailDict = {}
-retailDict['PuDong'] = 'R389'
-retailDict['HuanQiu'] = 'R683'
-retailDict['WuJiaoChang'] = 'R581'
-retailDict['NanJinDongLu'] = 'R359'
-retailDict['HuanMao'] = 'R401'
-retailDict['XiangGang'] = 'R390'
-
-file = open('log.txt', 'w+')
-url = "http://ir.weip.tech/Home/GetStoreiPhoneList"
-user_agent = 'Mozilla/5.0 (Windows NT 6.3; WOW64)'
-headers = {'User-Agent' : user_agent,
-           'Referer' : "http://ir.weip.tech"}
-values = {}
-values['storecode'] = 'R389'
-values['regioncode'] = 'CN'
-values['onlyshowavailability'] = 'false'
-data = urllib.urlencode(values)
-
-return_data = requests.post(url, values)
-dataDict = return_data.json()
-if dataDict['Result'] == True:
-    for dataList in dataDict['Data']:
-        if dataList['CanReserve'] == True and 'iPhone 7 Plus' in dataList['Name']:
-            print dataList
-else:
-    print 'Error in returning data!\n'
-
-
-def searchRetailStore(retailCode):
+def search_retail_store(retail_code):
     url = "http://ir.weip.tech/Home/GetStoreiPhoneList"
     values = {}
-    values['storecode'] = retailCode
+    values['storecode'] = retail_code
     values['regioncode'] = 'CN'
     values['onlyshowavailability'] = 'false'
-    Freq = 1500
-    Dur = 500
+    freq = 1500
+    dur = 500
 
     return_data = requests.post(url, values)
-    dataDict = return_data.json()
-    if dataDict['Result'] == True:
-        for dataList in dataDict['Data']:
-            gold_utf = '??'.encode("utf-8")
-            if dataList['CanReserve'] == True and 'iPhone 7' in dataList['Name'] and '32GB' in dataList['Name']:
-                print dataList
-                if 'Plus' in dataList['Name']:
+    data_dict = return_data.json()
+    if data_dict['Result'] is True:
+        for data_list in data_dict['Data']:
+            if data_list['CanReserve'] is True \
+            and 'iPhone 7' in data_list['Name'] \
+            and '32GB' in data_list['Name']:
+                print data_list
+                if 'Plus' in data_list['Name']:
                     print "!!!!!!!!!!!!!"
-                    file.write(time.ctime() + dataList['Name'].encode('utf-8') + '\n')
-                    file.flush()
-                    winsound.Beep(Freq,Dur)
+                    FILE.write(time.ctime() + data_list['Name'].encode('utf-8') + '\n')
+                    FILE.flush()
+                    winsound.Beep(freq, dur)
     else:
         print 'Error in returning data!\n'
 
+def main():
+    retail_dict = {}
+    retail_dict['PuDong'] = 'R389'
+    retail_dict['HuanQiu'] = 'R683'
+    retail_dict['WuJiaoChang'] = 'R581'
+    retail_dict['NanJinDongLu'] = 'R359'
+    retail_dict['HuanMao'] = 'R401'
+    retail_dict['XiangGang'] = 'R390'
 
-
-while True:
-    try:
-        print "Sleeping"
-        time.sleep(20)
-        i = 1
-        for retailName, retailCode in retailDict.items():
-            print str(i) + "\t" + retailName + " Searching!"
-            i = i + 1
-            searchRetailStore(retailCode)
-    except (KeyboardInterrupt):
-        file.close()
-        exit()
+    FILE = open('log.txt', 'w+')
+    UserAgent = 'Mozilla/5.0 (Windows NT 6.3; WOW64)'
+    headers = {'User-Agent' : UserAgent,
+               'Referer' : "http://ir.weip.tech"}
+    data = urllib.urlencode(values)
+    while True:
+        try:
+            print "Sleeping"
+            time.sleep(20)
+            i = 1
+            for retailName, retailCode in retail_dict.items():
+                print str(i) + "\t" + retailName + " Searching!"
+                i = i + 1
+                search_retail_store(retailCode)
+        except KeyboardInterrupt:
+            FILE.close()
+            exit()
 
 
 #dataDict = ast.literal_eval(return_data.text.encode('utf-8'))
